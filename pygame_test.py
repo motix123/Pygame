@@ -2,38 +2,71 @@
 import pygame
 
 # pygame setup
-
+width_screen=1700
+height_screen=900
 pygame.init()
 class Player(pygame.sprite.Sprite):
 
     # Constructor. Pass in the color of the block,
     # and its x and y position
-    def __init__(self, color, width, height,player_posx,player_posy):
-       # Call the parent class (Sprite) constructor
-       pygame.sprite.Sprite.__init__(self)
+    def __init__(self, type, width, height,player_posx,player_posy):
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self)
+        self.width=width
+        self.height=height
+        self.speed=1000
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        if type==1:
+           self.image = pygame.image.load("l.png")
+        elif type==2:
+           self.image = pygame.image.load("zakl.png")
+        else:
+           self.image = pygame.image.load("lod.png")
+        self.image = pygame.transform.scale(self.image,(50,50))
 
-       # Create an image of the block, and fill it with a color.
-       # This could also be an image loaded from the disk.
-       self.image = pygame.Surface([width, height])
-       self.image.fill(color)
 
-       # Fetch the rectangle object that has the dimensions of the image
-       # Update the position of this object by setting the values of rect.x and rect.y
-       self.rect = self.image.get_rect()
-       self.rect.x=player_posx
-       self.rect.y=player_posy
+        # Fetch the rectangle object that has the dimensions of the image
+        # Update the position of this object by setting the values of rect.x and rect.y
+        self.rect = self.image.get_rect()
+        self.rect.x=player_posx
+        self.rect.y=player_posy
 
-player1 = Player("#700083", 200, 50,0, 0)
-player2 = Player("#00ff55", 200, 50,1500, 900)
+    def move_left(self):
+        self.x -= self.speed*dt
+
+    def move_right(self):
+        self.x += self.speed*dt
+
+    @property
+    def x(self):
+        return self.rect.x
+    @x.setter
+    def x(self, value):
+        self.rect.x = min(max(0,value), width_screen - self.width)
+
+    def move_up(self):
+        self.y -= self.speed*dt
+
+    def move_down(self):
+        self.y += self.speed*dt
+
+    @property
+    def y(self):
+        return self.rect.y
+    @y.setter
+    def y(self, value):
+        self.rect.y = min(max(0,value), height_screen - self.height)
+
+player1 = Player(1, 50, 50,0, 0)
+player2 = Player(2, 51, 50,1500, 850)
 
 all_players = pygame.sprite.Group()
 
-all_players.add(player1)
-all_players.add(player2)
+all_players.add([player1])
+all_players.add([player2])
 
-
-
-screen = pygame.display.set_mode((1700, 900))
+screen = pygame.display.set_mode((width_screen, height_screen))
 clock = pygame.time.Clock()
 running = True
 dt = 0
@@ -49,18 +82,27 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
-    pygame.draw.circle(screen,"#700083", player_pos,50)
     all_players.draw(screen)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
-        player_pos.y -= 300 * dt
+        player2.move_up()
     if keys[pygame.K_DOWN]:
-        player_pos.y += 300 * dt
+        player2.move_down()
     if keys[pygame.K_LEFT]:
-        player_pos.x -= 300 * dt
+        player2.move_left()
     if keys[pygame.K_RIGHT]:
-        player_pos.x += 300 * dt
+        player2.move_right()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        player1.move_up()
+    if keys[pygame.K_s]:
+        player1.move_down()
+    if keys[pygame.K_a]:
+        player1.move_left()
+    if keys[pygame.K_d]:
+        player1.move_right()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -68,7 +110,7 @@ while running:
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for frame rate-
     # independent physics.
-    dt = clock.tick(60) / 280
+    dt = clock.tick(20) / 1000
 
 pygame.quit()
 
