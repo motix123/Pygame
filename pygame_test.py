@@ -5,8 +5,10 @@ import pygame
 width_screen=1700
 height_screen=900
 pygame.init()
+font = pygame.font.Font(None, 48)
+text_surface = font.render("TEST", True, ("#ff50ff"))
+text_rect = text_surface.get_rect(center=(width_screen // 2, height_screen // 2))
 class Player(pygame.sprite.Sprite):
-
     # Constructor. Pass in the color of the block,
     # and its x and y position
     def __init__(self, type, width, height,player_posx,player_posy):
@@ -103,6 +105,8 @@ while running:
         player1.move_left()
     if keys[pygame.K_d]:
         player1.move_right()
+
+    screen.blit(text_surface, text_rect)
 
     # flip() the display to put your work on screen
     pygame.display.flip()

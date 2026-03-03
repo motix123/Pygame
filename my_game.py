@@ -1,10 +1,11 @@
-"""# Example file showing a circle moving on screen
-import pygame
+# Example file showing a circle moving on screen
+"""import pygame
 
 # pygame setup
 width_screen=1700
 height_screen=900
 pygame.init()
+font = pygame.font.Font(None, 48)
 class Player(pygame.sprite.Sprite):
 
     # Constructor. Pass in the color of the block,
