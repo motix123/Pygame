@@ -59,7 +59,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = min(max(0,value), height_screen - self.height)
 
 player1 = Player(1, 50, 50,0, 0)
-player2 = Player(2, 51, 50,1500, 850)
+player2 = Player(2, 51, 50,1650, 850)
 
 all_players = pygame.sprite.Group()
 
@@ -110,7 +110,7 @@ while running:
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for frame rate-
     # independent physics.
-    dt = clock.tick(20) / 1000
+    dt = clock.tick(90) / 1000
 
 pygame.quit()
 
